@@ -1,2 +1,2 @@
-# nuke_speedLines
-A nuke plug-in that draws speed lines as a form of stylized motion blur
+# Speed Lines for Nuke
+A plug-in for The Foundry Nuke used to generate speedlines (a type of stylzed motion blur common in traditional animation and motion graphics).
