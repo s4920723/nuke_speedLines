@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILENAME= #Trim filename extensions
+echo "Compiling Nuke NDK code using GCC"
+gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o {$FILENAME}.so {$FILENAME}.cpp > ndkc_output.txt
+
+# If compilation successful move the file
+if [[ -n ${cat ndkc_output.txt | grep error} ]]; then
+	cp {$FILENAME}.so $HOME/.nuke
+	echo "No errors during compilation, copying file to .nuke dir."
+fi
+
+# Delete GCC output log
+rm ndkc_output.txt

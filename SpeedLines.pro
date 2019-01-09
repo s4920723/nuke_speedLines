@@ -1,6 +1,4 @@
-TARGET=speedLines
-OBJECTS_DIR=obj
-MOC_DIR=moc
+TARGET=SpeedLines
 SOURCES += $$PWD/src/*
 OTHER_FILES += $$PWD/examples/*
 
