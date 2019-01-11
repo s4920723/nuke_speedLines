@@ -1,14 +1,26 @@
 #!/bin/bash
 
-FILENAME= #Trim filename extensions
-echo "Compiling Nuke NDK code using GCC"
-gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o {$FILENAME}.so {$FILENAME}.cpp > ndkc_output.txt
-
-# If compilation successful move the file
-if [[ -n ${cat ndkc_output.txt | grep error} ]]; then
-	cp {$FILENAME}.so $HOME/.nuke
-	echo "No errors during compilation, copying file to .nuke dir."
+if [ "$#" -ne 1 ]; then
+	echo "Wrong number of arguments."
+	$SHELL
+	exit 1
 fi
 
-# Delete GCC output log
-rm ndkc_output.txt
+if [ -f $1 ]; then
+
+	FILENAME= $(basename $1 | cut -d "." -f 1)
+	echo "Compiling Nuke NDK code using GCC"
+	gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o $FILENAME.so ($FILENAME).cpp > ndkc_output.txt
+
+	# If compilation successful move the file
+	if [ -n $(grep "error" ndkc_output.txt) ]; then
+		cp {$FILENAME}.so $HOME/.nuke
+		echo "No errors during compilation, copying file to .nuke dir."
+	fi
+	# Delete GCC output log
+	rm ndkc_output.txt
+else
+	echo "File not found"
+fi
+$SHELL
+exit 0
