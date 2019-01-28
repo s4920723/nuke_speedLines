@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o SpeedLines.so Speedlines.cpp
+mv SpeedLines.so $HOME/.nuke
