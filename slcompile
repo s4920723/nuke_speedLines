@@ -1,4 +1,9 @@
 #!/bin/bash
 
 gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o SpeedLines.so Speedlines.cpp
-mv SpeedLines.so $HOME/.nuke
+echo -n "Move file SpeedLines.so to .nuke? [y/n]: "
+read ans
+
+if [[ "$ans" == "y" ]]; then
+ mv SpeedLines.so $HOME/.nuke
+fi
