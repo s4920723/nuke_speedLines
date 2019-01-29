@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o SpeedLines.so Speedlines.cpp
+gcc -shared -fPIC -I /opt/Nuke11.1v3/include -o SpeedLines.so SpeedLines.cpp
 echo -n "Move file SpeedLines.so to .nuke? [y/n]: "
 read ans
 

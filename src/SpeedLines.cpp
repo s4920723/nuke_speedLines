@@ -10,25 +10,37 @@ static const char* const HELP =
 
 using namespace DD::Image;
 
+static const char* const interpolation_types[] = {
+  "smooth", "linear", 0
+};
+
 class SpeedLines : public Iop
 {
+   public:
     bool drawX, drawY, drawZ; //Enable/Disable any of the RGB channels from the input
     int keyInterval; //How often a control point gets created
     int lifespan; //How long a control point persists for
     bool fade; //Does the line fade out after being cut off
-    int maxSpeed, minSpeed; //Pixels per frame value below/above which a control point is discarded
-
-   public:
-    // Constructor
+    float maxSpeed, minSpeed; //Pixels per frame value below/above which a control point is discarded
+    enum { LINEAR, SMOOTH };
+    int interpolation;
     SpeedLines(Node* node) : Iop(node)
     {
+        inputs(3);
         drawX = drawY = drawZ = true;
         lifespan = 4;
+        maxSpeed = 10.0f;
+        minSpeed = 2.00f;
+        interpolation = SMOOTH;
     }
 
-    // Destructor
-    ~SpeedLines()
+    const char* input_label(int n, char*) const
     {
+      switch (n) {
+        case 0: return "Col";
+        case 1: return "Vel";
+        default: return "mask";
+      }
     }
 
     void _validate(bool);
@@ -38,21 +50,13 @@ class SpeedLines : public Iop
 
     const char* Class() const { return CLASS; }
     const char* node_help() const { return HELP; }
-
-      //! Information to the plug-in manager of DDNewImage/Nuke.
-
-      static const Iop::Description description;
+    static const Iop::Description description;
 };
 
 static Iop* SpeedLinesCreate(Node* node)
 {
   return new SpeedLines(node);
 }
-
-/*! The Iop::Description is how NUKE knows what the name of the operator is,
-   how to create one, and the menu item to show the user. The menu item may be
-   0 if you do not want the operator to be visible.
- */
 
 const Iop::Description SpeedLines::description ( CLASS, "Merge/AddInputs", SpeedLinesCreate );
 
@@ -63,21 +67,11 @@ void SpeedLines::_validate(bool for_real)
 
 void SpeedLines::_request(int x, int y, int r, int t, ChannelMask channels, int count)
 {
-    input(0)->request(x, y, r, t, channels, count);
+    input0().request(x, y, r, t, channels, count);
 }
 
 void SpeedLines::engine(int y, int x, int r, ChannelMask channels, Row& row)
 {
-    //row.get(input0(), y, x, r, channels);
-    Row input0Row(x, r);
-    input0Row.get(input0(), y, x, r, channels);
-
-    foreach (z, channels)
-    {
-        const float* input0 = input0Row[z] + x;
-       float* OUTP = row.writable(z);
-       *OUTP = *input0;
-    }
     // Figure out how to get velocity daya -> look into Nuke Architecture
     // Figure out how to draw pixel -> look into Drawlops
     // Figure out how to not suck at this -> look into different career paths
@@ -87,7 +81,17 @@ void SpeedLines::engine(int y, int x, int r, ChannelMask channels, Row& row)
 void SpeedLines::knobs(Knob_Callback f)
 {
     Bool_knob(f, &drawX, "Draw X");
+    Tooltip(f, "Enables/Disables the use of the velocity data on the X axis");
     Bool_knob(f, &drawY, "Draw Y");
+    Tooltip(f, "Enables/Disables the use of the velocity data on the Y axis");
     Bool_knob(f, &drawZ, "Draw Z");
+    Tooltip(f, "Enables/Disables the use of the velocity data on the Z axis");
     Int_knob(f, &lifespan, "Lifespan");
+    Tooltip(f, "The amount of frames that a speedline persists for");
+    Float_knob(f, &minSpeed, "Minimum Speed");
+    Tooltip(f, "The minimal position difference required for a speedline segment to be drawn");
+    Float_knob(f, &maxSpeed, "Maximum Speed");
+    Tooltip(f, "The maximal position difference required for a speedline segment to be drawn");
+    Enumeration_knob(f, &interpolation, interpolation_types, "interpolation", "Interpolation Type");
+    Tooltip(f, "The type of intepolation used to draw each segment of the speedline");
 }
