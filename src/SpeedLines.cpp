@@ -2,6 +2,7 @@ static const char* const CLASS = "SpeedLines";
 static const char* const HELP =
         "Generates stylized motion blur using pre-rendered velocity data.";
 
+#include <DDImage/NukeWrapper.h>
 #include <DDImage/Iop.h>
 #include <DDImage/Row.h>
 #include <DDImage/Knobs.h>
@@ -24,9 +25,10 @@ class SpeedLines : public Iop
     float maxSpeed, minSpeed; //Pixels per frame value below/above which a control point is discarded
     enum { LINEAR, SMOOTH };
     int interpolation;
+
     SpeedLines(Node* node) : Iop(node)
     {
-        inputs(3);
+        inputs(2);
         drawX = drawY = drawZ = true;
         lifespan = 4;
         maxSpeed = 10.0f;
@@ -34,15 +36,7 @@ class SpeedLines : public Iop
         interpolation = SMOOTH;
     }
 
-    const char* input_label(int n, char*) const
-    {
-      switch (n) {
-        case 0: return "Col";
-        case 1: return "Vel";
-        default: return "mask";
-      }
-    }
-
+    const char* input_label(int n, char*) const;
     void _validate(bool);
     void _request(int x, int y, int r, int t, ChannelMask channels, int count);
     void engine(int y, int x, int r, ChannelMask, Row &);
@@ -53,16 +47,21 @@ class SpeedLines : public Iop
     static const Iop::Description description;
 };
 
-static Iop* SpeedLinesCreate(Node* node)
+
+const char* SpeedLines::input_label(int n, char*) const
 {
-  return new SpeedLines(node);
+    switch (n)
+    {
+        case 0: return "Vel";
+        default: return "Col";
+    }
 }
 
-const Iop::Description SpeedLines::description ( CLASS, "Merge/AddInputs", SpeedLinesCreate );
 
 void SpeedLines::_validate(bool for_real)
 {
     copy_info();
+    set_out_channels(Mask_All);
 }
 
 void SpeedLines::_request(int x, int y, int r, int t, ChannelMask channels, int count)
@@ -72,6 +71,7 @@ void SpeedLines::_request(int x, int y, int r, int t, ChannelMask channels, int 
 
 void SpeedLines::engine(int y, int x, int r, ChannelMask channels, Row& row)
 {
+    row.get(input0(), y, x, r, channels);
     // Figure out how to get velocity daya -> look into Nuke Architecture
     // Figure out how to draw pixel -> look into Drawlops
     // Figure out how to not suck at this -> look into different career paths
@@ -95,3 +95,11 @@ void SpeedLines::knobs(Knob_Callback f)
     Enumeration_knob(f, &interpolation, interpolation_types, "interpolation", "Interpolation Type");
     Tooltip(f, "The type of intepolation used to draw each segment of the speedline");
 }
+
+
+static Iop* build(Node* node)
+{
+  return new NukeWrapper(new SpeedLines(node));
+}
+
+const Iop::Description SpeedLines::description ( CLASS, "Merge/AddInputs", build);
