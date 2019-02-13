@@ -9,7 +9,12 @@ This is where the abstract goes.
 .NH
 Introduction
 .PP
-Intro paragraph
+It can be seen that in recent years the world of Computer Animation is gradually trying to diversify its visual style, moving
+away from what is now considered the conventional CG look. A common method is to try to adapt the aesthetic of other visual
+media such as traditional animation, graphic novels etc. This visual imitation occasionally introduce elements that a regular CG toolset
+has a difficult time replicating. That is why I decided to take on the task of developing an efficient tool that can automate the creation
+of one such element - “Speed lines”. “Speed lines” is an art technique that is used to convey rapid motion using streaks.
+
 .NH 1
 Origin of the speed-line
 .NH 2
