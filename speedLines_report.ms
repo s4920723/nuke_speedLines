@@ -1,22 +1,29 @@
 .TL
-Speedlines Generation Tool for Compositors
+Speed-line Generation Tool for Compositors
 .AU
 Kristiyan Aladjov
 .AB
-This is where the abstract goes.
+In this paper I present a semi-automatic method for drawing stylized motion blur in the form of speed-lines within a pre-rendered 3D animation sequence utilizing the information found in secondary images known as AOVs (Arbitrary Output Variables) that most modern offline rendering software is capable of outputting. I proceed to examine and evaluate several possible implementations using The Foundry NUKE Developer Kit, ImageMagick's C++ image processing library (Magick++) and a more manual method using NUKE's pre-existing built-in tools. An overview of the origin, purpose and variation of speed-lines in the variety of fields is also included. A comparison is made between the more common approach of producing these visual elements before the rendering process within a 3D environment and my attempt to draw the element post rendering.
+In short the method tracks a certain part of an animated 3D model using the data in the UV pass and then determines the attributes of the speed-lines such as thickness and direction using the data stored in the velocity pass.
 .AE
-
 .NH
 Introduction
 .PP
 It can be seen that in recent years the world of Computer Animation is gradually trying to diversify its visual style, moving
 away from what is now considered the conventional CG look. A common method is to try to adapt the aesthetic of other visual
-media such as traditional animation, graphic novels etc. This visual imitation occasionally introduce elements that a regular CG toolset
-has a difficult time replicating. That is why I decided to take on the task of developing an efficient tool that can automate the creation
-of one such element - “Speed lines”. “Speed lines” is an art technique that is used to convey rapid motion using streaks.
+of one such element - ''Speed lines''. “Speed lines” is an art technique that is used to convey rapid motion using streaks.
+media such as traditional animation, graphic novels etc. This visual imitation occasionally introduce elements that a regular computer animation toolset
+has a difficult time replicating. That is why I decided to take on the task of developing a tool that can automate or at least aid in the creation.
 
-.NH 1
+
+.NH 2
 Origin of the speed-line
+.PP
+There is no exact documentation of when speed-lines were used for the first time but it was most likely in the sphere of advertisement in the early 20\*{th\*} century.
+A more popular use of the speed-line is found in comic books where artist would use the technique to depict rapid movements performed by a character. Instructional imagery
+on different products also makes use of speed-lines on their packaging or user manuals. Moving away from static imagery we find speed-lines as well as other stylized blurring
+effects used in motion graphics and traditional animation. Their use in the two media is vastly different. Motion graphics would often put emphasis on these 2D effects in order
+to 
 .NH 2
 Different uses
 
@@ -27,9 +34,10 @@ Related work
 
 .NH
 Hypothesis
+.NH 2 
+Visual Style
 .PP
--VISUAL STYLE-
-As seen above speed-lines can have different visual qualities depending on their purpose. The visual style that I aim to achieve was
+As seen above speed-lines can have different visual qualities depending on their purpose.--DISCUSS THE PURPOSE-- The visual style that I aim to achieve was
 a flat 2D element meaning that it was not affected by lighting, that was widest at its source and gradually narrows down to a single
 point at its end. It could be looked at as a middle ground between the thicker, more eye-catching speed-lines seen in motion graphics and
 the subtle, sudden style that appears in traditional animation.
@@ -40,7 +48,7 @@ process is complete. At this point in a conventional animation pipeline the user
 contain data which could drive different attributes of the speed-lines. The two utility passes that are necessary for this method to work
 are a UV pass which contains data about the UV texture coordinates on a model and a velocity pass that stores the per-pixel rate of translation in
 the XYZ axes of the animated 3D model.
-
+- Put image of RGBA, UV, Velocity pass -
 -
 This 2D method of drawing speed-lines has three main steps - choosing a moving point on the animated model (initialization); recording its position on every 
 frame that it is visible on (tracking) and using the tracked points to draw a 2D polygon that represents the final speed-line (drawing).
@@ -89,3 +97,4 @@ Final words and future work.
 
 .NH
 References
+.TC
