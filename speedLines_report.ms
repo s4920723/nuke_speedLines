@@ -19,11 +19,15 @@ has a difficult time replicating. That is why I decided to take on the task of d
 .NH 2
 Origin of the speed-line
 .PP
-There is no exact documentation of when speed-lines were used for the first time but it was most likely in the sphere of advertisement in the early 20\*{th\*} century.
+A range of different  an artistic interpretation of motion blur artefacts present in photographed images.   There is no exact record of when speed-lines were used for the first time but it was most likely in the sphere of advertisement in the early 20\*{th\*} century.
 A more popular use of the speed-line is found in comic books where artist would use the technique to depict rapid movements performed by a character. Instructional imagery
-on different products also makes use of speed-lines on their packaging or user manuals. Moving away from static imagery we find speed-lines as well as other stylized blurring
-effects used in motion graphics and traditional animation. Their use in the two media is vastly different. Motion graphics would often put emphasis on these 2D effects in order
-to 
+on certain products also makes use of speed-lines on their packaging or user manuals. Moving away from static imagery we find speed-lines as well as other stylized blurring
+effects being used in motion graphics and traditional animation. Their use in the two media is vastly different. Motion graphics would often put emphasis on these 2D effects and use
+them less as a secondary visual element that only enhances the feeling of movement. In some cases the speed-line would be treated as an entity completely separate from any other
+moving part of the image. Animation takes the opposite approach and tries to move attention away from the speed-lines using them primarily when producing
+.I "smear frames" .
+Smearing employs a variety of blurring techniques such as stroboscopic effect and temporal flares but speed-lines still remain an essential component.
+-- PUT IMAGE OF SMEAR FRAME HERE --
 .NH 2
 Different uses
 
