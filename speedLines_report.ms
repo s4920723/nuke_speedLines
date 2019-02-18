@@ -3,7 +3,7 @@ Speed-line Generation Tool for Compositors
 .AU
 Kristiyan Aladjov
 .AB
-In this paper I present a semi-automatic method for drawing stylized motion blur in the form of speed-lines within a pre-rendered 3D animation sequence utilizing the information found in secondary images known as AOVs (Arbitrary Output Variables) that most modern offline rendering software is capable of outputting. I proceed to examine and evaluate several possible implementations using The Foundry NUKE Developer Kit, ImageMagick's C++ image processing library (Magick++) and a more manual method using NUKE's pre-existing built-in tools. An overview of the origin, purpose and variation of speed-lines in the variety of fields is also included. A comparison is made between the more common approach of producing these visual elements before the rendering process within a 3D environment and my attempt to draw the element post rendering.
+In this paper I present a method for drawing stylized motion blur in the form of speed-lines within a pre-rendered 3D animation sequence utilizing the information found in secondary images known as AOVs (Arbitrary Output Variables) that most modern offline rendering software is capable of outputting. I proceed to examine and evaluate several possible implementations using The Foundry NUKE Developer Kit, ImageMagick's C++ image processing library (Magick++) and a more manual method using NUKE's pre-existing built-in tools. An overview of the origin, purpose and variation of speed-lines in the variety of fields is also included. A comparison is made between the more common approach of producing these visual elements before the rendering process within a 3D environment and my attempt to draw the element post rendering.
 In short the method tracks a certain part of an animated 3D model using the data in the UV pass and then determines the attributes of the speed-lines such as thickness and direction using the data stored in the velocity pass.
 .AE
 .NH
@@ -34,14 +34,18 @@ Different uses
 .NH
 Context
 .PP
-Related work
+The interest in producing stylized motion blur for computer graphics peaked in the period of 2000 to 2005. Research of that time falls into one of two categories -
+working within a 3D environment or working with pre-rendered or live action footage. The work of Kim and Essa (2005) belongs to the latter group where the main task being
+dealt with is extracting a moving area of an image sequence so that it can be
+.I tracked
+through every frame. This is accomplished by segmenting every frame through mean shift segmentation, searching for similarly coloured segments between frames so their velocity could be calculated and then grouping different segments with matching velocities. The user then chooses a segment group that they desire to generate motion blur and the tracked data for those segments is then used to draw a wide variety of blurring artefacts. Song (2015) describes a method for generating speed-lines as objects in a 3D scene. The user selects an mesh within the scene that should act as the source for the speed-lines and the program builds a motion path for a number of moving vertecies on the mesh. Then depending on the frame the user is working on, a curve object is produced by discarding parts of the motion path that have disappeared or have not yet appeared at that moment in the animation. The final shape of the line is made at render time in accordance to several user input such as lifetime, thickness, distribution, etc. Masuch, Schlechtweg and Schulz (2002) depict an implementation that works with 3D data but is described as a part of post-processing. Although it is not made clear, their method suggests that the entire process of drawing the blurring effect takes place at render time. Once the scene geometry has been rendered, vertecies that form the outlines of the object are chosen as starting points for the speed-lines  
 
 .NH
 Hypothesis
 .NH 2 
 Visual Style
 .PP
-As seen above speed-lines can have different visual qualities depending on their purpose.--DISCUSS THE PURPOSE-- The visual style that I aim to achieve was
+As seen above speed-lines can have different visual qualities depending on their purpose. The visual style that I aim to achieve was
 a flat 2D element meaning that it was not affected by lighting, that was widest at its source and gradually narrows down to a single
 point at its end. It could be looked at as a middle ground between the thicker, more eye-catching speed-lines seen in motion graphics and
 the subtle, sudden style that appears in traditional animation.
@@ -64,7 +68,7 @@ in the velocity pass  but that would needlessly increase the amount of inputs th
 Tracking is where it becomes apparent why the UV pass is required. During initialization every starting point samples the UV colour. The program then proceeds
 to scan through subsequent frames in the animation, looking for a pixel with the exact same colour value. The UV pass is useful for this situation since
 the color values always remain the same throughout every frame and are attached to the same piece of geometry thus making it the perfect tracking marker for a CG character.
-The tracking process ends up outputting an array of points, each having sampled the velocity data at its position on the corresponding frame.
+The tracking process ends up outputting an array of points, each having sampled the velocity dat at its position on the corresponding frame.
 Finally in order to draw the speed-lines -CONTINUE-
 
 .NH 1
@@ -79,15 +83,25 @@ Scattering and tracking
 
 
 .NH
-Process
-.NH 1
+Attempted Implementations
+.NH 2
 Using the NUKE Developer Kit
 .PP
 My initial approach was to use the NUKE Development Kit(NDK) so that the tool could be loaded and used within the The Foundry
-Nuke compositing package.
+Nuke compositing package. 
 .NH 2
 Using ImageMagick++
-.NH 3
+.PP
+Moving away from NUKE, the attention was turned to a more conventional implementation by building a stand-alone application. The main base for this application
+was ImageMagick's C++ library (Magick++) aimed at drawing and manipulating 2D image.Magick++ provides a much more straight-forward set of classes - an Image class
+for reading/writing images in over 200 different formats according to the Magick++ documentation with built-in methods for retrieving pixel values, pixel coordinates
+and image resolution data and a Drawable class which allowed for the drawing of 2D primitives, most importantly Bezier curves and polygons. The trade-off here is that
+ImageMagick does not have to deal with a viewer, which was the main issue that overcomplicated the NDK implemenation but that means that the user does not have the immediate
+feedback that a viewer provides and can only observe the result once the speed-line image sequence is drawn and written onto a series of files. This also requires a different workflow -
+where with NUKE the user would load the plug-in as a node within their compositing network, with this implementation they need run the program externally and then load the output
+sequence into nuke as a separate "Read" node and then merge over the two sequences together. 
+
+.NH 2
 Using NUKE's pre-existing tools
 .NH
 Analysis
