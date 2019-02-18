@@ -100,11 +100,11 @@ the color values always remain the same throughout every frame and are attached 
 The tracking process ends up outputting an array of points, each having sampled the velocity dat at its position on the corresponding frame.
 Finally in order to draw the speed-lines -CONTINUE-
 
-.NH 1
+.NH 2
 Why compositing?
 .NH 2
 Pre-existing tools
-.NH 3
+.NH 2
 User control
 
 .NH
@@ -131,6 +131,9 @@ sequence into nuke as a separate "Read" node and then merge over the two sequenc
 
 .NH 2
 Using NUKE's pre-existing tools
+.PP
+As a final alternative I put together a NUKE network using the pre-existing tools in the software, primarily relying on the 2D tracker node and the Open Splines feature of the Roto node.
+Unlike the previous two implementations, this one only requires the UV pass which is used as an input for the 2D tracker node. The user then manually selects points on the image that act as starting points for the speed-lines. Every point is then 2D tracked and manually readjusted if need be. The main trick to achieving a good track using the UV pass is to have smaller pattern box which would be the area being tracked and a search area that covers a large portion of the frame. It follows the same tracking logic as the previous methods where it looks for a matching pixel colour value from to frame with the minor difference that instead of traversing through every pixel in the frame we can just specify a rectangular area which contains the moving element. Once tracking has been completed, the 
 .NH
 Analysis
 .XS
