@@ -3,11 +3,19 @@ Speed-line Generation Tool for Compositors
 .AU
 Kristiyan Aladjov
 .AB
-In this paper I present a method for drawing stylized motion blur in the form of speed-lines within a pre-rendered 3D animation sequence utilizing the information found in secondary images known as AOVs (Arbitrary Output Variables) that most modern offline rendering software is capable of outputting. I proceed to examine and evaluate several possible implementations using The Foundry NUKE Developer Kit, ImageMagick's C++ image processing library (Magick++) and a more manual method using NUKE's pre-existing built-in tools. An overview of the origin, purpose and variation of speed-lines in the variety of fields is also included. A comparison is made between the more common approach of producing these visual elements before the rendering process within a 3D environment and my attempt to draw the element post rendering.
-In short the method tracks a certain part of an animated 3D model using the data in the UV pass and then determines the attributes of the speed-lines such as thickness and direction using the data stored in the velocity pass.
+In this paper I present a method for drawing stylized motion blur in the form of speed-lines within a pre-rendered 3D animation sequence utilizing the information
+found in secondary images known as AOVs (Arbitrary Output Variables) that most modern offline rendering software is capable of outputting. I proceed to examine and
+evaluate several possible implementations using The Foundry NUKE Developer Kit, ImageMagick's C++ image processing library (Magick++) and a more manual method using
+NUKE's pre-existing built-in tools. An overview of the origin, purpose and variation of speed-lines in the variety of fields is also included. A comparison is made
+between the more common approach of producing these visual elements before the rendering process within a 3D environment and my attempt to draw the element post rendering.
+In short the method tracks a certain part of an animated 3D model using the data in the UV pass and then determines the attributes of the speed-lines such as thickness
+and direction using the data stored in the velocity pass.
 .AE
 .NH
 Introduction
+.XS
+Introduction
+.XE
 .PP
 It can be seen that in recent years the world of Computer Animation is gradually trying to diversify its visual style, moving
 away from what is now considered the conventional CG look. A common method is to try to adapt the aesthetic of other visual
@@ -19,7 +27,8 @@ has a difficult time replicating. That is why I decided to take on the task of d
 .NH 2
 Origin of the speed-line
 .PP
-A range of different  an artistic interpretation of motion blur artefacts present in photographed images.   There is no exact record of when speed-lines were used for the first time but it was most likely in the sphere of advertisement in the early 20\*{th\*} century.
+A range of different  an artistic interpretation of motion blur artefacts present in photographed images.   There is no exact record of when speed-lines were used for
+the first time but it was most likely in the sphere of advertisement in the early 20\*{th\*} century.
 A more popular use of the speed-line is found in comic books where artist would use the technique to depict rapid movements performed by a character. Instructional imagery
 on certain products also makes use of speed-lines on their packaging or user manuals. Moving away from static imagery we find speed-lines as well as other stylized blurring
 effects being used in motion graphics and traditional animation. Their use in the two media is vastly different. Motion graphics would often put emphasis on these 2D effects and use
@@ -34,14 +43,29 @@ Different uses
 .NH
 Context
 .PP
+.XS
+Context
+.XE
+
 The interest in producing stylized motion blur for computer graphics peaked in the period of 2000 to 2005. Research of that time falls into one of two categories -
 working within a 3D environment or working with pre-rendered or live action footage. The work of Kim and Essa (2005) belongs to the latter group where the main task being
 dealt with is extracting a moving area of an image sequence so that it can be
 .I tracked
-through every frame. This is accomplished by segmenting every frame through mean shift segmentation, searching for similarly coloured segments between frames so their velocity could be calculated and then grouping different segments with matching velocities. The user then chooses a segment group that they desire to generate motion blur and the tracked data for those segments is then used to draw a wide variety of blurring artefacts. Song (2015) describes a method for generating speed-lines as objects in a 3D scene. The user selects an mesh within the scene that should act as the source for the speed-lines and the program builds a motion path for a number of moving vertecies on the mesh. Then depending on the frame the user is working on, a curve object is produced by discarding parts of the motion path that have disappeared or have not yet appeared at that moment in the animation. The final shape of the line is made at render time in accordance to several user input such as lifetime, thickness, distribution, etc. Masuch, Schlechtweg and Schulz (2002) depict an implementation that works with 3D data but is described as a part of post-processing. Although it is not made clear, their method suggests that the entire process of drawing the blurring effect takes place at render time. Once the scene geometry has been rendered, vertecies that form the outlines of the object are chosen as starting points for the speed-lines  
+through every frame. This is accomplished by segmenting every frame through mean shift segmentation, searching for similarly coloured segments between frames
+so their velocity could be calculated and then grouping different segments with matching velocities. The user then chooses a segment group that they desire to
+generate motion blur and the tracked data for those segments is then used to draw a wide variety of blurring artefacts. Song (2015) describes a method for generating
+speed-lines as objects in a 3D scene. The user selects an mesh within the scene that should act as the source for the speed-lines and the program builds a motion
+path for a number of moving vertecies on the mesh. Then depending on the frame the user is working on, a curve object is produced by discarding parts of the motion
+path that have disappeared or have not yet appeared at that moment in the animation. The final shape of the line is made at render time in accordance to several user
+input such as lifetime, thickness, distribution, etc. Masuch, Schlechtweg and Schulz (2002) depict an implementation that works with 3D data but is described as a
+part of post-processing. Although it is not made clear, their method suggests that the entire process of drawing the blurring effect takes place at render time.
+Once the scene geometry has been rendered, vertecies that form the outlines of the object are chosen as starting points for the speed-lines  
 
 .NH
 Hypothesis
+.XS
+Hypothesis
+.XE
 .NH 2 
 Visual Style
 .PP
@@ -84,6 +108,9 @@ Scattering and tracking
 
 .NH
 Attempted Implementations
+.XS
+Attempted Implementation
+.XE
 .NH 2
 Using the NUKE Developer Kit
 .PP
@@ -105,14 +132,20 @@ sequence into nuke as a separate "Read" node and then merge over the two sequenc
 Using NUKE's pre-existing tools
 .NH
 Analysis
+.XS
+Analysis
+.XE
 .PP
 Critical evaluation of the process and the hypo
 
 .NH
 Conclusion
+.XS
+Conclusion
+.XE
 .PP
 Final words and future work.
 
 .NH
 References
-.TC
+.PX
