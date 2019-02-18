@@ -11,6 +11,7 @@ between the more common approach of producing these visual elements before the r
 In short the method tracks a certain part of an animated 3D model using the data in the UV pass and then determines the attributes of the speed-lines such as thickness
 and direction using the data stored in the velocity pass.
 .AE
+.PX
 .NH
 Introduction
 .XS
@@ -36,7 +37,10 @@ them less as a secondary visual element that only enhances the feeling of moveme
 moving part of the image. Animation takes the opposite approach and tries to move attention away from the speed-lines using them primarily when producing
 .I "smear frames" .
 Smearing employs a variety of blurring techniques such as stroboscopic effect and temporal flares but speed-lines still remain an essential component.
+
+
 -- PUT IMAGE OF SMEAR FRAME HERE --
+
 .NH 2
 Different uses
 
@@ -50,7 +54,7 @@ Context
 The interest in producing stylized motion blur for computer graphics peaked in the period of 2000 to 2005. Research of that time falls into one of two categories -
 working within a 3D environment or working with pre-rendered or live action footage. The work of Kim and Essa (2005) belongs to the latter group where the main task being
 dealt with is extracting a moving area of an image sequence so that it can be
-.I tracked
+.I "tracked"
 through every frame. This is accomplished by segmenting every frame through mean shift segmentation, searching for similarly coloured segments between frames
 so their velocity could be calculated and then grouping different segments with matching velocities. The user then chooses a segment group that they desire to
 generate motion blur and the tracked data for those segments is then used to draw a wide variety of blurring artefacts. Song (2015) describes a method for generating
@@ -74,14 +78,15 @@ a flat 2D element meaning that it was not affected by lighting, that was widest 
 point at its end. It could be looked at as a middle ground between the thicker, more eye-catching speed-lines seen in motion graphics and
 the subtle, sudden style that appears in traditional animation.
 
--
+
 Unlike similar attempts to implement speed-lines into 3D animation, I chose to approach this as a tool to be used after the 3D rendering
 process is complete. At this point in a conventional animation pipeline the user would have access to a variety of utility passes that
 contain data which could drive different attributes of the speed-lines. The two utility passes that are necessary for this method to work
 are a UV pass which contains data about the UV texture coordinates on a model and a velocity pass that stores the per-pixel rate of translation in
 the XYZ axes of the animated 3D model.
+
 - Put image of RGBA, UV, Velocity pass -
--
+
 This 2D method of drawing speed-lines has three main steps - choosing a moving point on the animated model (initialization); recording its position on every 
 frame that it is visible on (tracking) and using the tracked points to draw a 2D polygon that represents the final speed-line (drawing).
 Initializing a speed-line requires us to set up a starting point on a moving part of the image. That is done by giving the point a random XY coordinate
@@ -101,10 +106,6 @@ Why compositing?
 Pre-existing tools
 .NH 3
 User control
-.NH 4
-Scattering and tracking 
-.PP
-
 
 .NH
 Attempted Implementations
@@ -148,4 +149,3 @@ Final words and future work.
 
 .NH
 References
-.PX
