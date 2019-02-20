@@ -97,7 +97,7 @@ in the velocity pass  but that would needlessly increase the amount of inputs th
 Tracking is where it becomes apparent why the UV pass is required. During initialization every starting point samples the UV colour. The program then proceeds
 to scan through subsequent frames in the animation, looking for a pixel with the exact same colour value. The UV pass is useful for this situation since
 the color values always remain the same throughout every frame and are attached to the same piece of geometry thus making it the perfect tracking marker for a CG character.
-The tracking process ends up outputting an array of points, each having sampled the velocity dat at its position on the corresponding frame.
+The tracking process ends up outputting an array of points, each having sampled the velocity data at its position on the corresponding frame.
 Finally in order to draw the speed-lines -CONTINUE-
 
 .NH 2
@@ -115,8 +115,23 @@ Attempted Implementation
 .NH 2
 Using the NUKE Developer Kit
 .PP
-My initial approach was to use the NUKE Development Kit(NDK) so that the tool could be loaded and used within the The Foundry
-Nuke compositing package. 
+My initial approach was to use the
+.I "NUKE Developer Kit(NDK)"
+so that the tool could be loaded and used within the The Foundry
+Nuke compositing package. NUKE loads plug-ins by reading library files containing descriptions of a single custom node. Every node in a NUKE network could be looked at as an object of a type defined in one of these library files. Each such class or operator, as the NDK documentation refers to them, must inherent a base parent class depending on how the node handles the input data and what it is expected to output. For example a
+.I "Pixel Image Operator (PixelIop)"
+class is used for nodes that perform image processing operations on the input data or the 
+.I "Draw Image Operator (DrawIop)"
+is used for nodes that discard most of the input data and draw images from scratch. The speed-line node needs to both analyse the colour values of the input UV and Velocity pass as well as draw completely new elements. That is why it inherents the most basic of the operator classes simply named
+.I "Image Operator (Iop)"
+which would allow for that. The structure of an Image Operator node requires the redefinition of three virtual functions - 
+.I "request" ,
+.I "validate" and 
+.I "engine" .
+
+--EXPLAIN THE REQUEST VALIDATE ENGINE FUNCTIONS--
+
+
 .NH 2
 Using ImageMagick++
 .PP
